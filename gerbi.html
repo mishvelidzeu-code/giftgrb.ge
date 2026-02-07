@@ -136,77 +136,105 @@ body{
 <div class="container" id="app"></div>
 
 <script>
-const params=new URLSearchParams(window.location.search);
-const code=params.get("code");
+// 1. მონაცემთა ბაზა (აქ ამატებ, შლი ან ცვლი ინფორმაციას)
+const registryData = [
+  {
+    "code": "GRB-001",
+    "date": "2026-02-05",
+    "owner": "ტესტური ოჯახი",
+    "image": "images/crests/grb001.webp",
+    "description": "ეს არის სრული ჩანაწერი (გერბიც და ისტორიაც).",
+    "history": "აქ ჩაწერთ გვარის ისტორიას..."
+  },
+  {
+    "code": "GRB-002",
+    "date": "2026-02-06",
+    "owner": "აბრამიშვილების საგვარეულო",
+    "image": "images/crests/grb002.webp",
+    "description": "აბრამიშვილების საგვარეულო გერბი",
+    "history": "აბრამიშვილები წარმოიშვნენ ბიბლიური სახელიდან აბრამი..."
+  },
+  {
+    "code": "GRB-003",
+    "date": "2026-02-07",
+    "owner": "მხოლოდ გერბი",
+    "image": "images/crests/grb003.webp",
+    "description": "ამ ჩანაწერს ისტორია არ აქვს.",
+    "history": "" 
+  },
+  {
+    "code": "GRB-004",
+    "date": "2026-02-08",
+    "owner": "მხოლოდ ისტორია",
+    "image": "", 
+    "description": "ამ ჩანაწერს სურათი არ აქვს.",
+    "history": "ამ გვარს ჯერ არ აქვს გერბი, მაგრამ აქვს ვრცელი ისტორია..."
+  }
+];
 
-if(!code){
-  document.getElementById("status").className="status error";
-  document.getElementById("status").innerText="გერბის კოდი არ არის მითითებული";
-}else{
-  // აქ შევცვალე crests.json -> registry.json-ით
-  fetch("registry.json")
-    .then(r=>{
-      if(!r.ok) throw new Error();
-      return r.json();
-    })
-    .then(data=>{
-      // ძებნა გავხადე უფრო მოქნილი (uppercase)
-      const crest=data.find(x=>x.code.toUpperCase() === code.toUpperCase());
+// 2. ფუნქცია, რომელიც აწყობს გვერდს
+function init() {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
 
-      if(!crest){
-        const status=document.getElementById("status");
-        status.className="status error";
-        status.innerText="გერბი კოდით " + code + " ოფიციალურ რეესტრში ვერ მოიძებნა";
+    if (!code) {
+        document.getElementById("status").innerText = "შეცდომა: კოდი არ არის მითითებული";
         return;
-      }
+    }
 
-      document.getElementById("status").style.display="none";
-      const app=document.getElementById("app");
-      app.style.display="block";
+    // ვეძებთ მონაცემებს ზემოთ მოცემულ სიაში
+    const crest = registryData.find(x => x.code.toUpperCase() === code.toUpperCase());
 
-      app.innerHTML = `
-        <div class="certificate">
-          <div class="cert-header">
-            <h1>გერბის ოფიციალური სერტიფიკატი</h1>
-            <div class="cert-badge">ავთენტური</div>
-          </div>
+    if (crest) {
+        document.getElementById("status").style.display = "none";
+        const app = document.getElementById("app");
+        app.style.display = "block";
+        
+        // სათაურის ლოგიკა
+        let titleText = "გერბის ოფიციალური სერტიფიკატი";
+        if (!crest.image || crest.image.trim() === "") {
+            titleText = "საგვარეულო ისტორია";
+        }
 
-          <div class="cert-body">
-            <img src="${crest.image}" onerror="this.src='images/logo500.webp'">
+        // ვაშენებთ HTML-ს
+        app.innerHTML = `
+            <div class="certificate">
+                <div class="cert-header">
+                    <h1>${titleText}</h1>
+                    <div class="cert-badge">ავთენტური</div>
+                </div>
 
-            <div class="cert-data">
-              <p>
-                <span>გერბის კოდი</span>
-                <strong>${crest.code}</strong>
-              </p>
-              <p>
-                <span>ეკუთვნის</span>
-                <strong>${crest.owner}</strong>
-              </p>
-              <p>
-                <span>რეგისტრაციის თარიღი</span>
-                <strong>${crest.date}</strong>
-              </p>
-              <p>
-                <span>აღწერა</span>
-                <strong>${crest.description}</strong>
-              </p>
+                <div class="cert-body" style="display: ${crest.image ? 'grid' : 'block'}">
+                    ${crest.image ? `<img src="${crest.image}" onerror="this.style.display='none'">` : ''}
+
+                    <div class="cert-data">
+                        <p><span>კოდი</span> <strong>${crest.code}</strong></p>
+                        <p><span>მფლობელი</span> <strong>${crest.owner || '-'}</strong></p>
+                        <p><span>თარიღი</span> <strong>${crest.date || '-'}</strong></p>
+                        <p><span>აღწერა</span> <strong>${crest.description || '-'}</strong></p>
+                    </div>
+                </div>
+
+                ${crest.history ? `
+                    <div style="margin-top:30px; padding-top:20px; border-top:1px solid #eee; white-space:pre-line;">
+                        <span style="font-size:12px; color:#6b7280; text-transform:uppercase;">გვარის ისტორია</span>
+                        <div style="margin-top:10px; line-height:1.6;">${crest.history}</div>
+                    </div>
+                ` : ''}
+
+                <div class="cert-footer" style="margin-top:40px; text-align:center; font-size:14px; color:#6b7280;">
+                    © 2026 გერბი — ოფიციალური რეესტრი
+                </div>
             </div>
-          </div>
-
-          <div class="cert-footer">
-            © 2026 გერბი — ოფიციალური რეესტრი
-          </div>
-        </div>
-      `;
-    })
-    .catch(()=>{
-      const status=document.getElementById("status");
-      status.className="status error";
-      status.innerText="რეესტრთან კავშირი ვერ მოხერხდა. დარწმუნდით, რომ registry.json ფაილი არსებობს.";
-    });
+        `;
+    } else {
+        const status = document.getElementById("status");
+        status.className = "status error";
+        status.innerText = "ჩანაწერი კოდით " + code + " რეესტრში ვერ მოიძებნა";
+    }
 }
-</script>
+
+window.onload = init;</script>
 
 </body>
 </html>
