@@ -904,12 +904,56 @@ const mandatoryItems = [
   { name: "გერბის აღწერა" },
   { name: "გვარის წარმოშობა — ოფიციალური დოკუმენტი" }
 ];
-function searchCrest(){
-  const code=codeInput.value.trim();
-  if(!code){alert("შეიყვანეთ გერბის კოდი");return;}
-  window.location.href="gerbi.html?code="+encodeURIComponent(code);
-}
+async function searchCrest() {
+    // 1. მოვნიშნოთ ინპუტი (რომ ყველა ბრაუზერმა აღიქვას)
+    const inputEl = document.getElementById('codeInput');
+    if (!inputEl) return;
+    
+    const query = inputEl.value.trim().toLowerCase();
+    
+    if (!query) {
+        alert("გთხოვთ ჩაწეროთ კოდი ან გვარი / Please enter code or surname");
+        return;
+    }
 
+    try {
+        // 2. წამოვიღოთ მონაცემები (registry და surnames)
+        const [regRes, surRes] = await Promise.all([
+            fetch('registry.json'),
+            fetch('surnames.json')
+        ]);
+
+        if (!regRes.ok || !surRes.ok) throw new Error("ბაზის ფაილები ვერ მოიძებნა");
+
+        const registry = await regRes.json();
+        const surnames = await surRes.json();
+
+        // 3. ძებნა კოდით (მაგ: GRB-001)
+        const byCode = registry.find(item => item.code && item.code.toLowerCase() === query);
+        if (byCode) {
+            window.location.href = "gerbi.html?code=" + encodeURIComponent(byCode.code.toUpperCase());
+            return;
+        }
+
+        // 4. ძებნა გვარით (ქართულად ან ლათინურად)
+        const bySurname = surnames.find(item => 
+            (item.surname && item.surname.toLowerCase() === query) || 
+            (item.latin && item.latin.toLowerCase() === query)
+        );
+
+        if (bySurname && bySurname.crestCode) {
+            window.location.href = "gerbi.html?code=" + encodeURIComponent(bySurname.crestCode.toUpperCase());
+            return;
+        }
+
+        // 5. თუ ვერაფერი იპოვა
+        alert("ჩანაწერი ვერ მოიძებნა / Record not found");
+
+    } catch (error) {
+        console.error("Error:", error);
+        alert("მონაცემთა ბაზასთან კავშირი ვერ დამყარდა");
+    }
+}
 let selectedBox = {
   name: "Silver Box",
   price: 20
