@@ -1,240 +1,125 @@
 <!DOCTYPE html>
 <html lang="ka">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>გერბის ოფიციალური სერტიფიკატი</title>
-<meta name="description" content="გერბის ავთენტურობის გადამოწმება ოფიციალურ რეესტრში">
-
-<style>
-:root{
-  --bg:#f6f6f4;
-  --white:#ffffff;
-  --text:#1f2933;
-  --muted:#6b7280;
-  --border:#e5e7eb;
-  --gold:#c8a951;
-  --gold-soft:#f3efe4;
-}
-
-body{
-  margin:0;
-  background:var(--bg);
-  font-family:Georgia, serif;
-  color:var(--text);
-}
-
-/* STATUS */
-.status{
-  text-align:center;
-  margin-top:120px;
-  font-size:18px;
-  color:var(--muted);
-}
-.status.loading:after{
-  content:"";
-  display:block;
-  width:42px;
-  height:42px;
-  margin:30px auto 0;
-  border:4px solid #eee;
-  border-top:4px solid var(--gold);
-  border-radius:50%;
-  animation:spin 1s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-.status.error{
-  color:#8b1e1e;
-}
-
-/* CERTIFICATE */
-.container{
-  max-width:900px;
-  margin:80px auto;
-  padding:20px;
-  display:none;
-}
-
-.certificate{
-  background:var(--white);
-  border-radius:22px;
-  padding:50px;
-  border:2px solid var(--gold-soft);
-  box-shadow:0 30px 60px rgba(0,0,0,.08);
-  animation:fadeIn .6s ease;
-}
-
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(20px)}
-  to{opacity:1;transform:none}
-}
-
-.cert-header{
-  text-align:center;
-  margin-bottom:40px;
-}
-.cert-header h1{
-  margin:0;
-  font-size:34px;
-}
-.cert-badge{
-  display:inline-block;
-  margin-top:15px;
-  padding:8px 22px;
-  border-radius:30px;
-  background:#e6f3e6;
-  color:#1f7a1f;
-  font-weight:600;
-  font-size:14px;
-}
-
-.cert-body{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:40px;
-}
-.cert-body img{
-  width:100%;
-  border-radius:16px;
-  border:1px solid var(--border);
-}
-
-.cert-data p{
-  margin:0 0 18px;
-}
-.cert-data span{
-  display:block;
-  font-size:14px;
-  color:var(--muted);
-}
-.cert-data strong{
-  font-size:18px;
-}
-
-.cert-footer{
-  margin-top:40px;
-  text-align:center;
-  font-size:14px;
-  color:var(--muted);
-}
-
-@media (max-width: 600px) {
-  .cert-body { grid-template-columns: 1fr; }
-  .certificate { padding: 20px; }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>გერბის და გვარის დეტალები</title>
+    <style>
+        :root{ --bg:#f6f6f4; --white:#ffffff; --text:#1f2933; --gold:#c8a951; }
+        body{ margin:0; background:var(--bg); font-family:Georgia, serif; color:var(--text); padding: 20px; }
+        .status { text-align:center; margin-top:100px; font-size:18px; color: #666; }
+        .container { max-width:900px; margin:40px auto; background:var(--white); border-radius:22px; padding:50px; box-shadow:0 30px 60px rgba(0,0,0,.08); display:none; }
+        .cert-header { text-align:center; margin-bottom:40px; border-bottom: 2px solid #f3efe4; padding-bottom: 20px; }
+        .cert-body { display:grid; grid-template-columns: 1fr 1fr; gap:40px; align-items: start; }
+        .cert-body img { width:100%; border-radius:16px; border:1px solid #eee; }
+        .cert-data p { margin:0 0 15px; border-bottom: 1px solid #f9f9f9; padding-bottom: 5px; }
+        .cert-data span { display:block; font-size:12px; color:#999; text-transform:uppercase; }
+        .cert-data strong { font-size:18px; color:#222; }
+        .history-box { margin-top:40px; padding-top:20px; border-top: 1px solid #eee; }
+        .history-title { color:var(--gold); font-weight:bold; margin-bottom:15px; display:block; }
+        .history-text { line-height:1.8; white-space:pre-line; color:#444; }
+        @media (max-width:650px) { .cert-body { grid-template-columns: 1fr; } }
+    </style>
 </head>
-
 <body>
 
-<div id="status" class="status loading">
-  ვამოწმებთ გერბის რეესტრს…
+<div id="status" class="status">იტვირთება მონაცემები...</div>
+
+<div class="container" id="mainContainer">
+    <div class="cert-header">
+        <h1 id="pageTitle">გერბის სერტიფიკატი</h1>
+    </div>
+
+    <div class="cert-body">
+        <div id="imageWrapper">
+            <img id="mainImage" src="" alt="გამოსახულება">
+        </div>
+        <div class="cert-data">
+            <p><span>რეგისტრაციის კოდი</span> <strong id="dCode"></strong></p>
+            <p><span>მფლობელი / გვარი</span> <strong id="dOwner"></strong></p>
+            <p><span>თარიღი</span> <strong id="dDate"></strong></p>
+            <p><span>აღწერა</span> <strong id="dDesc"></strong></p>
+        </div>
+    </div>
+
+    <div id="historySection" class="history-box" style="display:none;">
+        <span class="history-title">გვარის ისტორიული მიმოხილვა</span>
+        <div id="dHistory" class="history-text"></div>
+    </div>
 </div>
 
-<div class="container" id="app"></div>
-
 <script>
-// 1. მონაცემთა ბაზა (აქ ამატებ, შლი ან ცვლი ინფორმაციას)
-const registryData = [
-  {
-    "code": "GRB-001",
-    "date": "2026-02-05",
-    "owner": "ტესტური ოჯახი",
-    "image": "images/crests/grb001.webp",
-    "description": "ეს არის სრული ჩანაწერი (გერბიც და ისტორიაც).",
-    "history": "აქ ჩაწერთ გვარის ისტორიას..."
-  },
-  {
-    "code": "GRB-002",
-    "date": "2026-02-06",
-    "owner": "აბრამიშვილების საგვარეულო",
-    "image": "images/crests/grb002.webp",
-    "description": "აბრამიშვილების საგვარეულო გერბი",
-    "history": "აბრამიშვილები წარმოიშვნენ ბიბლიური სახელიდან აბრამი..."
-  },
-  {
-    "code": "GRB-003",
-    "date": "2026-02-07",
-    "owner": "მხოლოდ გერბი",
-    "image": "images/crests/grb003.webp",
-    "description": "ამ ჩანაწერს ისტორია არ აქვს.",
-    "history": "" 
-  },
-  {
-    "code": "GRB-004",
-    "date": "2026-02-08",
-    "owner": "მხოლოდ ისტორია",
-    "image": "", 
-    "description": "ამ ჩანაწერს სურათი არ აქვს.",
-    "history": "ამ გვარს ჯერ არ აქვს გერბი, მაგრამ აქვს ვრცელი ისტორია..."
-  }
-];
-
-// 2. ფუნქცია, რომელიც აწყობს გვერდს
-function init() {
+async function loadRegistry() {
     const params = new URLSearchParams(window.location.search);
-    const code = params.get("code");
+    const code = params.get('code')?.toUpperCase();
 
     if (!code) {
-        document.getElementById("status").innerText = "შეცდომა: კოდი არ არის მითითებული";
+        document.getElementById('status').innerText = "შეცდომა: კოდი არ არის მითითებული.";
         return;
     }
 
-    // ვეძებთ მონაცემებს ზემოთ მოცემულ სიაში
-    const crest = registryData.find(x => x.code.toUpperCase() === code.toUpperCase());
+    try {
+        // 1. ორივე JSON ფაილის ერთდროულად წამოღება
+        const [regRes, surRes] = await Promise.all([
+            fetch('registry.json'),
+            fetch('surnames.json')
+        ]);
 
-    if (crest) {
-        document.getElementById("status").style.display = "none";
-        const app = document.getElementById("app");
-        app.style.display = "block";
+        if (!regRes.ok) throw new Error("registry.json ვერ ჩაიტვირთა");
         
-        // სათაურის ლოგიკა
-        let titleText = "გერბის ოფიციალური სერტიფიკატი";
-        if (!crest.image || crest.image.trim() === "") {
-            titleText = "საგვარეულო ისტორია";
+        const registry = await regRes.json();
+        const surnames = surRes.ok ? await surRes.json() : [];
+
+        // 2. ძებნა რეესტრში
+        const crest = registry.find(item => item.code.toUpperCase() === code);
+        // 3. ძებნა ისტორიებში (crestCode-ით დაკავშირება)
+        const historyData = surnames.find(item => item.crestCode?.toUpperCase() === code);
+
+        if (!crest && !historyData) {
+            document.getElementById('status').innerText = "ჩანაწერი კოდით " + code + " ვერ მოიძებნა.";
+            return;
         }
 
-        // ვაშენებთ HTML-ს
-        app.innerHTML = `
-            <div class="certificate">
-                <div class="cert-header">
-                    <h1>${titleText}</h1>
-                    <div class="cert-badge">ავთენტური</div>
-                </div>
+        // 4. მონაცემების ასახვა
+        document.getElementById('status').style.display = 'none';
+        document.getElementById('mainContainer').style.display = 'block';
 
-                <div class="cert-body" style="display: ${crest.image ? 'grid' : 'block'}">
-                    ${crest.image ? `<img src="${crest.image}" onerror="this.style.display='none'">` : ''}
+        // თუ გერბი გვაქვს რეესტრში
+        if (crest) {
+            document.getElementById('dCode').innerText = crest.code;
+            document.getElementById('dOwner').innerText = crest.owner;
+            document.getElementById('dDate').innerText = crest.date;
+            document.getElementById('dDesc').innerText = crest.description;
+            
+            if (crest.image) {
+                document.getElementById('mainImage').src = crest.image;
+            } else {
+                document.getElementById('imageWrapper').style.display = 'none';
+            }
+        }
 
-                    <div class="cert-data">
-                        <p><span>კოდი</span> <strong>${crest.code}</strong></p>
-                        <p><span>მფლობელი</span> <strong>${crest.owner || '-'}</strong></p>
-                        <p><span>თარიღი</span> <strong>${crest.date || '-'}</strong></p>
-                        <p><span>აღწერა</span> <strong>${crest.description || '-'}</strong></p>
-                    </div>
-                </div>
+        // თუ ისტორია გვაქვს surnames.json-ში
+        if (historyData) {
+            document.getElementById('historySection').style.display = 'block';
+            document.getElementById('dHistory').innerText = historyData.history;
+            
+            // თუ რეესტრში არ იყო მფლობელი, ისტორიიდან ავიღოთ გვარი
+            if (!crest) {
+                document.getElementById('dOwner').innerText = historyData.surname;
+                document.getElementById('dCode').innerText = historyData.crestCode;
+                document.getElementById('pageTitle').innerText = "საგვარეულო ისტორია";
+                if (historyData.image) document.getElementById('mainImage').src = historyData.image;
+            }
+        }
 
-                ${crest.history ? `
-                    <div style="margin-top:30px; padding-top:20px; border-top:1px solid #eee; white-space:pre-line;">
-                        <span style="font-size:12px; color:#6b7280; text-transform:uppercase;">გვარის ისტორია</span>
-                        <div style="margin-top:10px; line-height:1.6;">${crest.history}</div>
-                    </div>
-                ` : ''}
-
-                <div class="cert-footer" style="margin-top:40px; text-align:center; font-size:14px; color:#6b7280;">
-                    © 2026 გერბი — ოფიციალური რეესტრი
-                </div>
-            </div>
-        `;
-    } else {
-        const status = document.getElementById("status");
-        status.className = "status error";
-        status.innerText = "ჩანაწერი კოდით " + code + " რეესტრში ვერ მოიძებნა";
+    } catch (err) {
+        console.error(err);
+        document.getElementById('status').innerText = "შეცდომა: მონაცემთა ბაზასთან კავშირი ვერ დამყარდა.";
     }
 }
 
-window.onload = init;</script>
+window.onload = loadRegistry;
+</script>
 
 </body>
 </html>
