@@ -908,7 +908,6 @@ async function searchCrest() {
     const inputEl = document.getElementById('codeInput');
     if (!inputEl) return;
     
-    // trim() შლის შემთხვევით დაწერილ დაშორებებს (სპეისებს)
     const query = inputEl.value.trim().toLowerCase();
     
     if (!query) {
@@ -917,19 +916,17 @@ async function searchCrest() {
     }
 
     try {
+        // მნიშვნელოვანი ცვლილება: ვამატებთ დროს (?v=), რომ ბრაუზერმა ყოველთვის ახალი ფაილი წაიკითხოს
+        const v = new Date().getTime(); 
         const [regRes, surRes] = await Promise.all([
-            fetch('registry.json'),
-            fetch('surnames.json')
+            fetch(`registry.json?v=${v}`),
+            fetch(`surnames.json?v=${v}`)
         ]);
 
         if (!regRes.ok || !surRes.ok) throw new Error("ფაილები ვერ ჩაიტვირთა");
 
         const registry = await regRes.json();
         const surnames = await surRes.json();
-
-        // აჩვენებს კონსოლში (F12), ხედავს თუ არა აბუაშვილს ბაზაში
-        console.log("საძიებო სიტყვა:", query);
-        console.log("ბაზაში არსებული გვარები:", surnames);
 
         // 1. ძებნა კოდით (მაგ: GRB-002)
         const byCode = registry.find(item => item.code && item.code.toLowerCase() === query);
@@ -945,7 +942,6 @@ async function searchCrest() {
         );
 
         if (bySurname) {
-            console.log("გვარი ნაპოვნია! კოდი:", bySurname.crestCode);
             window.location.href = "gerbi.html?code=" + encodeURIComponent(bySurname.crestCode.toUpperCase());
             return;
         }
@@ -956,8 +952,7 @@ async function searchCrest() {
         console.error("Error:", error);
         alert("შეცდომა მონაცემების წაკითხვისას");
     }
-}
-let selectedBox = {
+}let selectedBox = {
   name: "Silver Box",
   price: 20
 };
