@@ -1,0 +1,16 @@
+[
+  {
+    "code": "GRB-001",
+    "date": "2026-02-05",
+    "owner": "ტესტური ოჯახი",
+    "image": "images/crests/grb001.webp",
+    "description": "ეს არის სატესტო გერბის ჩანაწერი."
+  },
+  {
+    "code": "GRB-002",
+    "date": "2026-02-06",
+    "owner": "აბრამიშვილების საგვარეულო",
+    "image": "images/crests/grb002.webp",
+    "description": "აბრამიშვილების საგვარეულო გერბი"
+  }
+]

@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>გერბი — საგვარეულო გერბები და ოფიციალური რეესტრი</title>
+<meta name="description" content="საგვარეულო გერბები, გვარის ისტორიები, სასაჩუქრე ბოქსები და გერბების ოფიციალური რეესტრი.">
+
+<style>
+:root{
+  --bg:#f6f6f4;
+  --white:#ffffff;
+  --text:#1f2933;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --gold:#c8a951;
+  --radius:18px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:"Segoe UI", Georgia, serif;
+  background:var(--bg);
+  color:var(--text);
+}
+header{
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+/* ჰედერი — უცვლელი */
+.nav{
+  max-width:1200px;
+  margin:auto;
+  padding:0px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+/* ლოგო — უცვლელი */
+.logo img{
+  width:150px;
+  height:50px;
+  object-fit:contain;
+  display:block;
+}
+
+.menu a{
+  margin-left:22px;
+  text-decoration:none;
+  color:var(--text);
+  font-weight:500;
+}
+.menu a:hover{color:var(--gold)}
+.order-btn{
+  background:var(--gold);
+  padding:10px 18px;
+  border-radius:10px;
+  color:#000;
+  font-weight:600;
+  text-decoration:none;
+  cursor:pointer;
+}
+
+/* HERO */
+.hero{
+  padding:80px 20px;
+  background:linear-gradient(180deg,#ebe7df,var(--bg));
+}
+.hero-inner{
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:40px;
+  align-items:center;
+}
+.hero img{
+  width:100%;
+  height:420px;
+  object-fit:cover;
+  border-radius:18px;
+  transition:opacity .6s ease;
+}
+
+/* SECTIONS */
+section{
+  max-width:1200px;
+  margin:auto;
+  padding:70px 20px;
+}
+h2{margin-bottom:25px}
+
+/* REGISTRY */
+.search-box{
+  max-width:560px;
+  margin:0 auto;
+  background:#fff;
+  padding:30px;
+  border-radius:18px;
+  border:1px solid #e5e7eb;
+  text-align:center;
+}
+.search-box input{
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  border:1px solid #e5e7eb;
+  margin-bottom:12px;
+}
+.search-box button{
+  padding:12px 24px;
+  border:none;
+  border-radius:10px;
+  background:#c8a951;
+  font-weight:600;
+  cursor:pointer;
+}
+
+/* GALLERY */
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:22px;
+}
+.image-box{
+  background:#fff;
+  border-radius:18px;
+  overflow:hidden;
+  border:1px solid #e5e7eb;
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+.image-box:hover{
+  transform:translateY(-6px);
+  box-shadow:0 14px 30px rgba(0,0,0,.12);
+}
+.image-box img{
+  width:100%;
+  height:230px;
+  object-fit:cover;
+}
+
+/* PRODUCTS */
+.products{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:22px;
+}
+.product{
+  background:#fff;
+  border-radius:18px;
+  border:1px solid #e5e7eb;
+  padding:16px;
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+.product:hover{
+  transform:translateY(-6px);
+  box-shadow:0 14px 30px rgba(0,0,0,.12);
+}
+.product img{
+  width:100%;
+  height:190px;
+  object-fit:cover;
+  border-radius:14px;
+}
+.product button{
+  width:100%;
+  margin-top:10px;
+  padding:10px;
+  background:#c8a951;
+  border:none;
+  border-radius:10px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+/* CART */
+.cart{
+  margin-top:40px;
+  background:#fff;
+  border-radius:18px;
+  border:1px solid #e5e7eb;
+  padding:20px;
+}
+.cart ul{list-style:none;padding:0}
+.cart li{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:6px 0;
+}
+.cart li.mandatory{font-weight:600}
+.remove-btn{
+  margin-left:10px;
+  background:none;
+  border:none;
+  color:#b91c1c;
+  font-weight:600;
+  cursor:pointer;
+}
+
+/* FORM */
+.form{margin-top:30px}
+input,textarea{
+  width:100%;
+  padding:14px;
+  margin-bottom:10px;
+  border-radius:10px;
+  border:1px solid #e5e7eb;
+}
+
+/* DEMO MODAL */
+#demoPay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+}
+#demoPay .box{
+  background:#fff;
+  max-width:420px;
+  margin:12% auto;
+  padding:30px;
+  border-radius:18px;
+  text-align:center;
+}
+.sample-title{
+  padding:14px 10px;
+  text-align:center;
+  font-weight:600;
+  font-size:15px;
+  letter-spacing:.4px;
+  background:#fff;
+  color:#1f2933;
+  border-top:1px solid #e5e7eb;
+}
+
+.sample-title::after{
+  content:"";
+  display:block;
+  width:40px;
+  height:2px;
+  background:#c8a951;
+  margin:8px auto 0;
+  border-radius:2px;
+}
+.sample-title{
+  padding:14px 10px;
+  text-align:center;
+  font-weight:600;
+  font-size:15px;
+  letter-spacing:.4px;
+  background:#fff;
+  color:#1f2933;
+  border-top:1px solid #e5e7eb;
+}
+
+.sample-title::after{
+  content:"";
+  display:block;
+  width:40px;
+  height:2px;
+  background:#c8a951;
+  margin:8px auto 0;
+  border-radius:2px;
+}
+
+.sample-title.vip{
+  color:#c8a951;
+  font-weight:700;
+}
+/* product link fix */
+.product-link{
+  display:block;
+  color:inherit;
+  text-decoration:none;
+}
+.product-link:hover h3{
+  text-decoration:underline;
+}
+/* ლურჯი underline-ის მოხსნა ნიმუშებზე */
+.image-box{
+  text-decoration: none;
+  color: inherit;
+}
+
+.image-box p{
+  text-decoration: none;
+}
+.box-selector{
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:18px;
+  padding:20px;
+  margin:30px 0;
+}
+
+.gift-box{margin-top:20px}
+
+.box-card{
+  display:block;
+  cursor:pointer;
+}
+
+.box-card input{
+  display:none;
+}
+
+.box-images{
+  position:relative;
+  border-radius:14px;
+  overflow:hidden;
+}
+
+.box-images img{
+  width:100%;
+  display:none;
+}
+
+.box-images img.active{
+  display:block;
+}
+
+.box-images button{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  background:rgba(0,0,0,.5);
+  color:#fff;
+  border:none;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  cursor:pointer;
+}
+
+.box-images .prev{left:10px}
+.box-images .next{right:10px}
+
+.box-info{
+  margin-top:12px;
+}
+
+.box-info .price{
+  color:#c8a951;
+  font-weight:600;
+  margin-left:10px;
+}
+.box-images{
+  max-width:320px;
+  margin:0 auto;
+}
+
+.box-images img{
+  height:200px;
+  object-fit:cover;
+}
+/* მონიშნული ყუთის ვიზუალური ჩარჩო */
+.box-card{
+  border:2px solid transparent;
+  border-radius:18px;
+  padding:16px;
+}
+
+.box-card input:checked + .box-images,
+.box-card input:checked ~ .box-info{
+  outline:2px solid #c8a951;
+  outline-offset:6px;
+}
+#imgModal img{
+  display:block !important;
+  width:auto;
+  max-width:90%;
+  max-height:90%;
+  margin:5% auto;
+}
+/* === GIFT BOX GRID — FINAL, SAFE === */
+
+.box-selector{
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:18px;
+  padding:30px;
+  margin:40px 0;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:26px;
+}
+
+.box-selector h3{
+  grid-column:1 / -1;
+  margin-bottom:25px;
+}
+
+.gift-box{
+  margin:0;
+}
+
+.box-card{
+  display:block;
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:18px;
+  padding:18px;
+  cursor:pointer;
+  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+
+.box-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 16px 32px rgba(0,0,0,.12);
+}
+
+.box-card:has(input:checked){
+  border-color:#c8a951;
+  box-shadow:0 0 0 2px rgba(200,169,81,.35);
+}
+
+/* cart + form არ შედიან grid-ში */
+.box-selector .cart,
+.box-selector .form{
+  grid-column:1 / -1;
+}
+<style>
+  /* ყველა ძველი სტილი უცვლელი */
+
+  /* ⬇️ აქ ჩასვი ახალი FIX */
+  .box-selector{
+    display:block !important;
+  }
+
+  .box-selector > .gift-box{
+    float:left;
+    width:calc(25% - 20px);
+    margin-right:26px;
+    margin-bottom:26px;
+  }
+
+  .box-selector > .gift-box:nth-child(4n){
+    margin-right:0;
+  }
+
+  @media(max-width:1024px){
+    .box-selector > .gift-box{
+      width:calc(50% - 13px);
+    }
+    .box-selector > .gift-box:nth-child(2n){
+      margin-right:0;
+    }
+  }
+
+  @media(max-width:560px){
+    .box-selector > .gift-box{
+      width:100%;
+      margin-right:0;
+    }
+  }
+</style>
+
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="nav">
+    <div class="logo">
+  <a href="index.html">
+    <img src="logo500.png" alt="gerbi.ge">
+  </a>
+</div>
+
+    <div class="menu">
+      <a href="#home">მთავარი</a>
+      <a href="#registry">რეესტრი</a>
+      <a href="#samples">ნიმუშები</a>
+      <a href="#order" class="order-btn">შეკვეთა</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div>
+      <h1>
+აჩუქე ინდივიდუალურად მისთვის შექმნილი, ოფიციალურად რეგისტრირებული გერბი,
+რომელიც იბეჭდება თითოეულ საჩუქარზე
+</h1>
+
+<p>
+რეესტრში გატარებული გერბი • გვარის მოკლე ისტორიული აღწერა — პირველწყაროებზე დაყრდნობით • ინდივიდუალური დიზაინი • ოფიციალური დოკუმენტი • სასაჩუქრე ყუთი<br>
+თითოეული პროდუქტი დამზადებულია შესაბამისი ინდივიდუალური გერბით
+</p>
+
+    </div>
+
+    <!-- HERO ფოტო -->
+    <img id="heroImage" src="images/hero1.png">
+  </div>
+</section>
+
+<section id="registry">
+  <h2 style="text-align:center">გერბის ოფიციალური რეესტრი</h2>
+  <div class="search-box">
+    <input id="codeInput" placeholder="მაგ: GRB-001">
+    <button onclick="searchCrest()">გერბის მოძებნა</button>
+  </div>
+</section>
+
+<section id="samples">
+  <h2>ნიმუშები</h2>
+  <div class="gallery">
+  <a href="samples/vip-box.html" class="image-box">
+  <img src="images/1.png">
+  <p class="sample-title vip">VIP Box — ინდივიდუალური შეკვეთა</p>
+</a>
+
+
+  <a href="samples/premium-box.html" class="image-box">
+  <img src="images/2.png">
+  <p class="sample-title">Premium Box</p>
+</a>
+
+
+  <a href="samples/gold-box.html" class="image-box">
+  <img src="images/3.png">
+  <p class="sample-title">Gold Box</p>
+</a>
+
+
+  <a href="samples/silver-box.html" class="image-box">
+  <img src="images/4.png">
+  <p class="sample-title">Silver Box</p>
+</a>
+
+</div>
+
+</section>
+
+<section id="order">
+  <h2>პროდუქტები</h2>
+  <div class="products" id="products"></div>
+<!-- ყუთების არჩევა -->
+<div class="box-selector">
+  <h3>აირჩიე სასაჩუქრე ყუთი *</h3>
+<div class="gift-box">
+  <label class="box-card">
+    <input type="radio" name="giftBox" value="silver" checked>
+
+    <div class="box-images">
+      <img src="images/boxes/silver/1.png" class="active box-zoom">
+<img src="images/boxes/silver/2.png" class="box-zoom">
+<img src="images/boxes/silver/3.png" class="box-zoom">
+
+
+      <button type="button" class="prev">‹</button>
+      <button type="button" class="next">›</button>
+    </div>
+
+    <div class="box-info">
+      <strong>Silver Box</strong>
+      <span class="price">20 ₾</span>
+      <p>მინიმალისტური, ელეგანტური შესრულება</p>
+    </div>
+  </label>
+</div>
+
+
+
+<div class="gift-box">
+  <label class="box-card">
+    <input type="radio" name="giftBox" value="gold">
+
+    <div class="box-images">
+      <img src="images/boxes/gold/1.png" class="active box-zoom">
+      <img src="images/boxes/gold/2.png" class="box-zoom">
+      <img src="images/boxes/gold/3.png" class="box-zoom">
+
+      <button type="button" class="prev">‹</button>
+      <button type="button" class="next">›</button>
+    </div>
+
+    <div class="box-info">
+      <strong>Gold Box</strong>
+      <span class="price">50 ₾</span>
+      <p>გაუმჯობესებული დიზაინი და პრემიუმ დეტალები</p>
+    </div>
+  </label>
+</div>
+
+<div class="gift-box">
+  <label class="box-card">
+    <input type="radio" name="giftBox" value="premium" >
+
+    <div class="box-images">
+      <img src="images/boxes/premium/1.png" class="active box-zoom">
+<img src="images/boxes/premium/2.png" class="box-zoom">
+<img src="images/boxes/premium/3.png" class="box-zoom">
+
+
+      <button type="button" class="prev">‹</button>
+      <button type="button" class="next">›</button>
+    </div>
+
+    <div class="box-info">
+      <strong>Premium Box</strong>
+<span class="price">100 ₾</span>
+<p>პრემიუმ ხარისხი და დახვეწილი შესრულება</p>
+
+    </div>
+  </label>
+</div>
+
+<div class="gift-box">
+  <label class="box-card">
+    <input type="radio" name="giftBox" value="vip" >
+
+    <div class="box-images">
+      <img src="images/boxes/vip/1.png" class="active box-zoom">
+<img src="images/boxes/vip/2.png" class="box-zoom">
+<img src="images/boxes/vip/3.png" class="box-zoom">
+
+
+      <button type="button" class="prev">‹</button>
+      <button type="button" class="next">›</button>
+    </div>
+
+    <div class="box-info">
+      <strong>VIP Box</strong>
+<span class="price">200 ₾</span>
+<p>ექსკლუზიური შეკვეთა, უმაღლესი დონე</p>
+
+    </div>
+  </label>
+</div>
+
+
+
+
+  <div class="cart">
+    <h3>კალათა</h3>
+    <ul id="cartItems"></ul>
+    <strong>ჯამი: <span id="total">0</span> ₾</strong>
+  </div>
+
+  <div class="form">
+    <p style="font-size:14px;color:#777">გადახდა დროებით სატესტო რეჟიმშია</p>
+    <input id="buyerName" placeholder="მყიდველის სახელი და გვარი">
+    <input id="phone" placeholder="ტელეფონი">
+    <input id="targetName" placeholder="ვისზე კეთდება გერბი (სახელი)">
+    <input id="targetSurname" placeholder="ვისზე კეთდება გერბი (გვარი)">
+    <textarea placeholder="დამატებითი ინფორმაცია"></textarea>
+    <button class="order-btn" onclick="startDemoPayment()">გადახდაზე გადასვლა</button>
+  </div>
+</section>
+
+<footer style="text-align:center;padding:25px;background:#eee">
+  © 2026 გერბი — ყველა უფლება დაცულია
+</footer>
+
+<div id="demoPay">
+  <div class="box">
+    <h3>გადახდა (DEMO)</h3>
+    <p>ეს არის სატესტო რეჟიმი.<br>გადახდა არ ხორციელდება.</p>
+    <p><strong>თანხა: <span id="demoAmount">0</span> ₾</strong></p>
+    <button class="order-btn" onclick="confirmDemoPayment()">გაგრძელება</button><br><br>
+    <a href="#" onclick="closeDemoPayment()">გაუქმება</a>
+  </div>
+</div>
+<!-- Image Zoom Modal -->
+<div id="imgModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:999;">
+  <span id="closeModal" style="position:absolute;top:20px;right:30px;font-size:32px;color:#fff;cursor:pointer;">&times;</span>
+
+  <button id="modalPrev" style="position:absolute;left:30px;top:50%;transform:translateY(-50%);font-size:40px;background:none;border:none;color:#fff;cursor:pointer;">‹</button>
+  <button id="modalNext" style="position:absolute;right:30px;top:50%;transform:translateY(-50%);font-size:40px;background:none;border:none;color:#fff;cursor:pointer;">›</button>
+
+  <img id="modalImg" style="display:block;max-width:90%;max-height:90%;margin:5% auto;border-radius:12px;">
+</div>
+<script>
+function searchCrest(){
+  const code=codeInput.value.trim();
+  if(!code){alert("შეიყვანეთ გერბის კოდი");return;}
+  window.location.href="gerbi.html?code="+encodeURIComponent(code);
+}
+
+const mandatoryItems=[
+  {name:"სასაჩუქრე ყუთი",price:1},
+  {name:"გერბის აღწერა",price:3},
+  {name:"გვარის მოკლე ისტორია",price:2}
+];
+
+const products=[
+  {name:"ღვინო",price:60,img:"images/products/1.png",link:"wine.html"},
+  {name:"ვისკი",price:150,img:"images/products/2.png",link:"whiskey.html"},
+  {name:"ბლოკნოტი",price:35,img:"images/products/3.png",link:"notebook.html"},
+  {name:"მანქანის ბრელოკი",price:25,img:"images/products/4.png",link:"keychain.html"},
+  {name:"საფულე",price:90,img:"images/products/5.png",link:"wallet.html"},
+  {name:"კალამი",price:70,img:"images/products/6.png",link:"pen.html"},
+  {name:"ჭიქა",price:30,img:"images/products/7.png",link:"mug.html"},
+  {name:"ალკოჰოლის ფლასკა",price:110,img:"images/products/8.png",link:"flask.html"},
+  {name:"სადგამი სუვენირი",price:250,img:"images/products/9.png",link:"stand.html"},
+  {name:"ლაპელ პინი",price:80,img:"images/products/10.png",link:"lapel-pin.html"},
+  {name:"ქამარი",price:120,img:"images/products/11.png",link:"belt.html"},
+  {name:"საათი",price:2500,img:"images/products/12.png",link:"watch.html"},
+  {name:"სანთებელა",price:35,img:"images/products/13.png",link:"lighter.html"},
+  {name:"ტყავის სამაჯური",price:70,img:"images/products/14.png",link:"leather-bracelet.html"},
+  {name:"კედლის საათი",price:50,img:"images/products/15.png",link:"wall-clock.html"},
+  {name:"თეფში სუვენირი",price:40,img:"images/products/16.png",link:"plate.html"},
+  {name:"შარფი",price:49,img:"images/products/17.png",link:"scarf.html"},
+  {name:"თერმოსი",price:50,img:"images/products/18.png",link:"thermos.html"}
+];
+
+let cart=[...mandatoryItems];
+const list=document.getElementById("products");
+
+products.forEach(p=>{
+  const d=document.createElement("div");
+  d.className="product";
+  d.innerHTML=`
+    <a href="products/${p.link}" class="product-link">
+      <img src="${p.img}">
+      <h3>${p.name}</h3>
+    </a>
+    <p>ფასი: ${p.price} ₾</p>
+    <button onclick="addToCart('${p.name}',${p.price})">კალათაში დამატება</button>
+  `;
+  list.appendChild(d);
+});
+
+function addToCart(name,price){
+  cart.push({name,price});
+  renderCart();
+}
+function removeFromCart(index){
+  cart.splice(index,1);
+  renderCart();
+}
+function renderCart(){
+  cartItems.innerHTML="";
+  let sum = 0;
+
+  const mandatoryNames = mandatoryItems.map(m=>m.name).join(" + ");
+  const mandatoryPrice = 39;
+
+  const liMandatory = document.createElement("li");
+  liMandatory.className = "mandatory";
+  liMandatory.innerHTML = `
+    <span>${mandatoryNames}</span>
+    <span>${mandatoryPrice} ₾</span>
+  `;
+  cartItems.appendChild(liMandatory);
+  sum += mandatoryPrice;
+
+  if(selectedBox){
+    const boxLi = document.createElement("li");
+    boxLi.className = "mandatory";
+    boxLi.innerHTML = `
+      <span>სასაჩუქრე ყუთი — ${selectedBox.name}</span>
+      <span>${selectedBox.price} ₾</span>
+    `;
+    cartItems.appendChild(boxLi);
+    sum += selectedBox.price;
+  }
+
+  cart.forEach((i,idx)=>{
+    if(mandatoryItems.find(m=>m.name===i.name)) return;
+
+    sum += i.price;
+    const li=document.createElement("li");
+    li.innerHTML=`
+      <span>${i.name}</span>
+      <span>
+        ${i.price} ₾
+        <button class="remove-btn" onclick="removeFromCart(${idx})">ამოშლა</button>
+      </span>
+    `;
+    cartItems.appendChild(li);
+  });
+
+  total.innerText = sum;
+}
+ 
+renderCart();
+
+function startDemoPayment(){
+  if(!buyerName.value||!phone.value||!targetName.value||!targetSurname.value){
+    alert("გთხოვთ შეავსოთ ყველა აუცილებელი ველი");
+    return;
+  }
+  demoAmount.innerText=total.innerText;
+  demoPay.style.display="block";
+}
+function closeDemoPayment(){demoPay.style.display="none"}
+function confirmDemoPayment(){
+  closeDemoPayment();
+  alert("⏳ გადახდის მოლოდინში\n\nშეკვეთა დაფიქსირდა სატესტო რეჟიმში.");
+}
+
+/* HERO ავტომატური სლაიდერი — PNG */
+const heroImages = [
+  "images/hero1.png",
+  "images/hero2.png"
+];
+let heroIndex = 0;
+const heroImg = document.getElementById("heroImage");
+
+setInterval(()=>{
+  heroImg.style.opacity = 0;
+  setTimeout(()=>{
+    heroIndex = (heroIndex + 1) % heroImages.length;
+    heroImg.src = heroImages[heroIndex];
+    heroImg.style.opacity = 1;
+  },400);
+},4000);
+document.querySelectorAll('.box-images').forEach(box=>{
+  let imgs = box.querySelectorAll('img');
+  let index = 0;
+
+  box.querySelector('.next').onclick = ()=>{
+    imgs[index].classList.remove('active');
+    index = (index + 1) % imgs.length;
+    imgs[index].classList.add('active');
+  };
+
+  box.querySelector('.prev').onclick = ()=>{
+    imgs[index].classList.remove('active');
+    index = (index - 1 + imgs.length) % imgs.length;
+    imgs[index].classList.add('active');
+  };
+});
+// BOX IMAGE ZOOM + SLIDER
+const modal = document.getElementById("imgModal");
+const modalImg = document.getElementById("modalImg");
+const closeModal = document.getElementById("closeModal");
+const modalPrev = document.getElementById("modalPrev");
+const modalNext = document.getElementById("modalNext");
+
+let modalImages = [];
+let modalIndex = 0;
+
+document.querySelectorAll(".box-images").forEach(box=>{
+  const imgs = box.querySelectorAll(".box-zoom");
+
+  imgs.forEach((img, i)=>{
+    img.addEventListener("click", e=>{
+      e.stopPropagation();
+      modalImages = imgs;
+      modalIndex = i;
+      modalImg.src = modalImages[modalIndex].src;
+      modal.style.display = "block";
+    });
+  });
+});
+
+modalNext.onclick = (e)=>{
+  e.stopPropagation();
+  modalIndex = (modalIndex + 1) % modalImages.length;
+  modalImg.src = modalImages[modalIndex].src;
+};
+
+modalPrev.onclick = (e)=>{
+  e.stopPropagation();
+  modalIndex = (modalIndex - 1 + modalImages.length) % modalImages.length;
+  modalImg.src = modalImages[modalIndex].src;
+};
+
+closeModal.onclick = ()=> modal.style.display = "none";
+modal.onclick = (e)=>{
+  if(e.target === modal){
+    modal.style.display = "none";
+  }
+};
+
+document.addEventListener("click", function(e){
+  if(e.target.classList.contains("box-zoom")){
+    e.preventDefault();   // ⬅️ ეს არის მთავარი
+    e.stopPropagation();  // ⬅️ ეს უკვე გაქვს
+    modalImg.src = e.target.src;
+    modal.style.display = "block";
+  }
+});
+
+closeModal.onclick = ()=> modal.style.display = "none";
+modal.onclick = ()=> modal.style.display = "none";
+/* === GIFT BOX → CART LOGIC === */
+
+let selectedBox = {
+  name: "Silver Box",
+  price: 20
+};
+
+function updateGiftBox(boxName, boxPrice){
+  selectedBox = { name: boxName, price: boxPrice };
+  renderCart();
+}
+
+/* radio change listener */
+document.querySelectorAll('input[name="giftBox"]').forEach(radio=>{
+  radio.addEventListener("change", e=>{
+    if(!e.target.checked) return;
+
+    const card = e.target.closest(".box-card");
+    const title = card.querySelector(".box-info strong").innerText;
+    const priceText = card.querySelector(".price").innerText;
+    const price = parseInt(priceText.replace(/\D/g,""),10);
+
+    updateGiftBox(title, price);
+  });
+});
+
+
+</script>
+
+
+</body>
+</html>

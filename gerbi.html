@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>გერბის ოფიციალური სერტიფიკატი</title>
+<meta name="description" content="გერბის ავთენტურობის გადამოწმება ოფიციალურ რეესტრში">
+
+<style>
+:root{
+  --bg:#f6f6f4;
+  --white:#ffffff;
+  --text:#1f2933;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --gold:#c8a951;
+  --gold-soft:#f3efe4;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  font-family:Georgia, serif;
+  color:var(--text);
+}
+
+/* STATUS */
+.status{
+  text-align:center;
+  margin-top:120px;
+  font-size:18px;
+  color:var(--muted);
+}
+.status.loading:after{
+  content:"";
+  display:block;
+  width:42px;
+  height:42px;
+  margin:30px auto 0;
+  border:4px solid #eee;
+  border-top:4px solid var(--gold);
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.status.error{
+  color:#8b1e1e;
+}
+
+/* CERTIFICATE */
+.container{
+  max-width:900px;
+  margin:80px auto;
+  padding:20px;
+  display:none;
+}
+
+.certificate{
+  background:var(--white);
+  border-radius:22px;
+  padding:50px;
+  border:2px solid var(--gold-soft);
+  box-shadow:0 30px 60px rgba(0,0,0,.08);
+  animation:fadeIn .6s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:none}
+}
+
+.cert-header{
+  text-align:center;
+  margin-bottom:40px;
+}
+.cert-header h1{
+  margin:0;
+  font-size:34px;
+}
+.cert-badge{
+  display:inline-block;
+  margin-top:15px;
+  padding:8px 22px;
+  border-radius:30px;
+  background:#e6f3e6;
+  color:#1f7a1f;
+  font-weight:600;
+  font-size:14px;
+}
+
+.cert-body{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:40px;
+}
+.cert-body img{
+  width:100%;
+  border-radius:16px;
+  border:1px solid var(--border);
+}
+
+.cert-data p{
+  margin:0 0 18px;
+}
+.cert-data span{
+  display:block;
+  font-size:14px;
+  color:var(--muted);
+}
+.cert-data strong{
+  font-size:18px;
+}
+
+.cert-footer{
+  margin-top:40px;
+  text-align:center;
+  font-size:14px;
+  color:var(--muted);
+}
+</style>
+</head>
+
+<body>
+
+<!-- STATUS -->
+<div id="status" class="status loading">
+  ვამოწმებთ გერბის რეესტრს…
+</div>
+
+<!-- CERTIFICATE -->
+<div class="container" id="app"></div>
+
+<script>
+const params=new URLSearchParams(window.location.search);
+const code=params.get("code");
+
+if(!code){
+  document.getElementById("status").className="status error";
+  document.getElementById("status").innerText="გერბის კოდი არ არის მითითებული";
+}else{
+  fetch("crests.json")
+    .then(r=>r.json())
+    .then(data=>{
+      const crest=data.find(x=>x.code===code);
+
+      if(!crest){
+        const status=document.getElementById("status");
+        status.className="status error";
+        status.innerText="გერბი ამ კოდით ოფიციალურ რეესტრში ვერ მოიძებნა";
+        return;
+      }
+
+      document.getElementById("status").style.display="none";
+      const app=document.getElementById("app");
+      app.style.display="block";
+
+      app.innerHTML=`
+        <div class="certificate">
+          <div class="cert-header">
+            <h1>გერბის ოფიციალური სერტიფიკატი</h1>
+            <div class="cert-badge">ავთენტური</div>
+          </div>
+
+          <div class="cert-body">
+            <img src="${crest.image || 'https://images.unsplash.com/photo-1549880338-65ddcdfd017b?w=600'}">
+
+            <div class="cert-data">
+              <p>
+                <span>გერბის კოდი</span>
+                <strong>${crest.code}</strong>
+              </p>
+              <p>
+                <span>ეკუთვნის</span>
+                <strong>${crest.owner}</strong>
+              </p>
+              <p>
+                <span>შექმნის თარიღი</span>
+                <strong>${crest.date}</strong>
+              </p>
+              <p>
+                <span>აღწერა</span>
+                ${crest.description}
+              </p>
+            </div>
+          </div>
+
+          <div class="cert-footer">
+            © 2026 გერბი — ოფიციალური რეესტრი
+          </div>
+        </div>
+      `;
+    })
+    .catch(()=>{
+      const status=document.getElementById("status");
+      status.className="status error";
+      status.innerText="რეესტრთან კავშირი ვერ მოხერხდა";
+    });
+}
+</script>
+
+</body>
+</html>

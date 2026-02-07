@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>გერბიანი მაჯის საათი | გერბი</title>
+<meta name="description" content="გერბიანი მაჯის საათი">
+
+<style>
+body{
+  margin:0;
+  font-family:"Segoe UI", Georgia, serif;
+  background:#f6f6f4;
+  color:#1f2933;
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:60px 20px;
+}
+
+h1{
+  text-align:center;
+  margin-bottom:40px;
+}
+
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:20px;
+  margin-bottom:40px;
+}
+
+.gallery img{
+  width:100%;
+  height:320px;
+  object-fit:cover;
+  border-radius:16px;
+  border:1px solid #e5e7eb;
+}
+
+.description{
+  max-width:760px;
+  margin:0 auto 40px;
+  font-size:16px;
+  line-height:1.7;
+}
+
+.description ul{
+  margin-top:15px;
+}
+
+.description li{
+  margin-bottom:8px;
+}
+
+.back{
+  display:inline-block;
+  margin:auto;
+  text-decoration:none;
+  font-weight:600;
+  color:#c8a951;
+}
+.back:hover{
+  text-decoration:underline;
+}
+.zoom-img{
+  cursor:pointer;
+}
+
+#lightbox{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.9);
+  z-index:9999;
+  align-items:center;
+  justify-content:center;
+}
+
+#lightbox img{
+  max-width:90%;
+  max-height:90%;
+}
+
+#close{
+  position:absolute;
+  top:20px;
+  right:30px;
+  font-size:36px;
+  color:#fff;
+  cursor:pointer;
+}
+
+#prev,#next{
+  position:absolute;
+  top:50%;
+  font-size:50px;
+  color:#fff;
+  cursor:pointer;
+  user-select:none;
+}
+
+#prev{left:30px}
+#next{right:30px}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>გერბიანი მაჯის საათი</h1>
+
+  <!-- 3 სურათი -->
+ <div class="gallery">
+  <img src="../images/products/watch/1.webp" class="zoom-img">
+  <img src="../images/products/watch/2.webp" class="zoom-img">
+  <img src="../images/products/watch/3.webp" class="zoom-img">
+</div>
+
+
+
+  <!-- აღწერა -->
+  <div class="description">
+    <p>
+      გერბიანი მაჯის საათი წარმოადგენს სრულად ინდივიდუალურ პერსონალურ საჩუქარს,
+      რომელიც იქმნება კონკრეტული პირისთვის და მასზე დატანილია ინდივიდუალური გერბი, რომელიც რეგისტრირებულია ოფიციალურ რეესტრში.
+    </p>
+
+    <ul>
+      <li>ინდივიდუალურად შექმნილი და რეესტრში გატარებული </li>
+      <li>გერბის დატანა თითოეულ საჩუქარზე</li>
+      <li>დაგერბილი პრემიუმ სასაჩუქრე ყუთი</li>
+      <li>ოფიციალური დოკუმენტი და გვარის მოკლე ისტორიული აღწერა</li>
+    </ul>
+
+    <p>
+      გერბიანი მაჯის საათი განკუთვნილია მათთვის, ვისაც სურს განსაკუთრებული,
+      უნიკალური და ისტორიული ღირებულების მქონე საჩუქრის გაკეთება.
+    </p>
+  </div>
+
+  <!-- უკან დაბრუნება -->
+  <div style="text-align:center">
+    <a href="../index.html" class="back">← უკან დაბრუნება</a>
+  </div>
+
+</div>
+<div id="lightbox">
+  <span id="close">×</span>
+  <span id="prev">‹</span>
+  <img id="lightbox-img">
+  <span id="next">›</span>
+</div>
+<script>
+const images = document.querySelectorAll(".zoom-img");
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightbox-img");
+let currentIndex = 0;
+
+images.forEach((img, index) => {
+  img.addEventListener("click", () => {
+    currentIndex = index;
+    lightboxImg.src = img.src;
+    lightbox.style.display = "flex";
+  });
+});
+
+document.getElementById("close").onclick = () => {
+  lightbox.style.display = "none";
+};
+
+document.getElementById("next").onclick = () => {
+  currentIndex = (currentIndex + 1) % images.length;
+  lightboxImg.src = images[currentIndex].src;
+};
+
+document.getElementById("prev").onclick = () => {
+  currentIndex = (currentIndex - 1 + images.length) % images.length;
+  lightboxImg.src = images[currentIndex].src;
+};
+</script>
+
+</body>
+</html>

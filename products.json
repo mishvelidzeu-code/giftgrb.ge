@@ -1,0 +1,20 @@
+[
+  {"name":"ღვინო","slug":"wine","price":60,"link":"wine.html"},
+  {"name":"ვისკი","slug":"whiskey","price":150,"link":"whiskey.html"},
+  {"name":"ბლოკნოტი","slug":"notebook","price":35,"link":"notebook.html"},
+  {"name":"მანქანის ბრელოკი","slug":"keychain","price":25,"link":"keychain.html"},
+  {"name":"საფულე","slug":"wallet","price":90,"link":"wallet.html"},
+  {"name":"კალამი","slug":"pen","price":70,"link":"pen.html"},
+  {"name":"ჭიქა","slug":"mug","price":30,"link":"mug.html"},
+  {"name":"ალკოჰოლის ფლასკა","slug":"flask","price":110,"link":"flask.html"},
+  {"name":"სადგამი სუვენირი","slug":"stand","price":250,"link":"stand.html"},
+  {"name":"ლაპელ პინი","slug":"lapel-pin","price":80,"link":"lapel-pin.html"},
+  {"name":"ქამარი","slug":"belt","price":120,"link":"belt.html"},
+  {"name":"საათი","slug":"watch","price":2500,"link":"watch.html"},
+  {"name":"სანთებელა","slug":"lighter","price":35,"link":"lighter.html"},
+  {"name":"ტყავის სამაჯური","slug":"leather-bracelet","price":70,"link":"leather-bracelet.html"},
+  {"name":"კედლის საათი","slug":"wall-clock","price":50,"link":"wall-clock.html"},
+  {"name":"თეფში სუვენირი","slug":"plate","price":40,"link":"plate.html"},
+  {"name":"შარფი","slug":"scarf","price":49,"link":"scarf.html"},
+  {"name":"თერმოსი","slug":"thermos","price":50,"link":"thermos.html"}
+]
