@@ -19,6 +19,31 @@
         .history-title { color:var(--gold); font-weight:bold; margin-bottom:15px; display:block; }
         .history-text { line-height:1.8; white-space:pre-line; color:#444; }
         @media (max-width:650px) { .cert-body { grid-template-columns: 1fr; } }
+
+.author-box{
+    margin:60px auto 0;
+    text-align:center;
+}
+.author-box img{
+    width:140px;
+    height:140px;
+    object-fit:cover;
+    border-radius:50%;
+    border:3px solid var(--gold);
+}
+.author-box p{
+    margin-top:14px;
+    font-size:15px;
+    color:#374151;
+    line-height:1.4;
+}
+.author-box strong{
+    display:block;
+    margin-top:4px;
+    font-weight:600;
+    color:#1f2933;
+}
+
     </style>
 </head>
 <body>
@@ -43,9 +68,17 @@
     </div>
 
     <div id="historySection" class="history-box" style="display:none;">
-        <span class="history-title">გვარის ისტორიული მიმოხილვა</span>
-        <div id="dHistory" class="history-text"></div>
-    </div>
+    <span class="history-title">გვარის ისტორიული მიმოხილვა</span>
+    <div id="dHistory" class="history-text"></div>
+</div>
+
+<!-- ავტორი აქ, historySection-ის შემდეგ -->
+<div class="author-box">
+    <img src="images/levan-beraia.webp" alt="გერბის შემქმნელი ლევან ბერაია">
+    <p>
+        გერბის შემქმნელი<br>
+        <strong>ლევან ბერაია</strong>
+    </p>
 </div>
 
 <script>
