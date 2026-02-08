@@ -2,26 +2,162 @@
 <html lang="ka">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>გერბი — საგვარეულო სიმბოლიკა</title>
-<meta name="description" content="გერბის მნიშვნელობა, ტიპები და ოფიციალური რეგისტრაცია.">
+<meta name="description" content="გერბის მნიშვნელობა, სიმბოლოები და ოფიციალური რეგისტრაცია.">
+
+<style>
+body{
+  margin:0;
+  font-family:"Segoe UI", Georgia, serif;
+  background:#f6f6f4;
+  color:#1f2933;
+}
+section{
+  max-width:900px;
+  margin:auto;
+  padding:80px 20px;
+}
+h1{
+  font-size:36px;
+  margin-bottom:20px;
+}
+p{
+  font-size:17px;
+  line-height:1.7;
+  color:#374151;
+}
+.feature{
+  background:#fff;
+  border-radius:18px;
+  padding:30px;
+  margin:30px 0;
+  border:1px solid #e5e7eb;
+}
+.btn{
+  display:inline-block;
+  margin-top:30px;
+  padding:14px 28px;
+  background:#c8a951;
+  color:#000;
+  font-weight:600;
+  border-radius:12px;
+  text-decoration:none;
+}
+
+/* MINI ORDER */
+.mini-order{
+  margin-top:60px;
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:18px;
+  padding:28px;
+  text-align:center;
+}
+.mini-order h3{margin:0 0 10px}
+.mini-order p{
+  margin:0 0 18px;
+  font-size:15px;
+  color:#6b7280;
+}
+.mini-order input{
+  width:100%;
+  max-width:360px;
+  padding:14px;
+  margin:6px auto;
+  display:block;
+  border-radius:10px;
+  border:1px solid #e5e7eb;
+}
+.mini-order button{
+  margin-top:14px;
+  padding:12px 26px;
+  background:#c8a951;
+  border:none;
+  border-radius:12px;
+  font-weight:600;
+  cursor:pointer;
+}
+#miniMsg{
+  margin-top:12px;
+  font-weight:600;
+}
+</style>
 </head>
 
 <body>
 
-<h1>გერბი</h1>
+<section>
+  <h1>გერბი — იდენტობის სიმბოლო</h1>
 
-<p>
-გერბი წარმოადგენს საგვარეულო ან პიროვნულ სიმბოლოს,
-რომელიც ასახავს ისტორიას, ღირსებას და მემკვიდრეობას.
-</p>
+  <p>
+  გერბი წარმოადგენს უნიკალურ სიმბოლოს, რომელიც ასახავს ოჯახის,
+  გვარის ან პიროვნების ისტორიას, ღირსებასა და მემკვიდრეობას.
+  </p>
 
-<ul>
-  <li>გერბის სტრუქტურა და სიმბოლოები</li>
-  <li>ოფიციალური რეგისტრაცია</li>
-  <li>უნიკალური კოდი და რეესტრი</li>
-</ul>
+  <div class="feature">
+    <h3>ჰერალდიკური სიმბოლიკა</h3>
+    <p>
+    გერბი შედგება ფერების, ნიშნებისა და ფორმებისგან,
+    რომელთაც აქვთ ისტორიული და სიმბოლური მნიშვნელობა.
+    </p>
+  </div>
 
-<a href="index.html#registry">გერბის რეესტრის გახსნა →</a>
+  <div class="feature">
+    <h3>ოფიციალური რეგისტრაცია</h3>
+    <p>
+    ყოველი გერბი რეგისტრირდება უნიკალური კოდით
+    და თავსდება ოფიციალურ ციფრულ რეესტრში.
+    </p>
+  </div>
+
+  <a href="index.html#registry" class="btn">
+    გერბის რეესტრის გახსნა →
+  </a>
+
+  <!-- MINI ORDER -->
+  <div class="mini-order">
+    <h3>გსურთ პერსონალური გერბი?</h3>
+    <p>დატოვე კონტაქტი და ჩვენ დაგიკავშირდებით</p>
+
+    <input type="text" id="miniName" placeholder="სახელი და გვარი">
+    <input type="tel" id="miniPhone" placeholder="ტელეფონის ნომერი">
+
+    <button onclick="sendMiniOrder()">დაგვიკავშირდით</button>
+    <div id="miniMsg"></div>
+  </div>
+
+</section>
+
+<script>
+function sendMiniOrder(){
+  const name = document.getElementById("miniName").value.trim();
+  const phone = document.getElementById("miniPhone").value.trim();
+  const msgBox = document.getElementById("miniMsg");
+
+  if(!name || !phone){
+    msgBox.style.color = "#b91c1c";
+    msgBox.innerText = "გთხოვთ შეავსოთ ყველა ველი";
+    return;
+  }
+
+  fetch("https://formspree.io/f/mdadrawd", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      message: `გერბის გვერდი\nსახელი: ${name}\nტელეფონი: ${phone}`
+    })
+  }).then(()=>{
+    msgBox.style.color = "#16a34a";
+    msgBox.innerText = "მოთხოვნა გაიგზავნა ✔";
+    document.getElementById("miniName").value = "";
+    document.getElementById("miniPhone").value = "";
+  }).catch(()=>{
+    msgBox.style.color = "#b91c1c";
+    msgBox.innerText = "შეცდომა გაგზავნისას";
+  });
+}
+</script>
 
 </body>
 </html>
