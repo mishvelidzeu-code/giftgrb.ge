@@ -7,6 +7,59 @@
 <meta name="description" content="გვარის ისტორია, წარმოშობა და კავშირი საგვარეულო გერბებთან. ოფიციალური რეესტრის ნახვა.">
 
 <style>
+
+.surname-packages{
+  margin:40px 0;
+  padding:30px;
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:18px;
+}
+
+.packages-title{
+  text-align:center;
+  font-size:22px;
+  margin-bottom:24px;
+}
+
+.packages-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+}
+
+.package-card{
+  border:1px solid #e5e7eb;
+  border-radius:16px;
+  padding:22px;
+  text-align:center;
+  background:#fafafa;
+}
+
+.package-card h4{
+  margin:0 0 8px;
+  font-size:18px;
+}
+
+.package-price{
+  font-size:20px;
+  font-weight:700;
+  color:#c8a951;
+  margin:8px 0;
+}
+
+.package-note{
+  font-size:14px;
+  color:#555;
+  line-height:1.5;
+}
+
+.package-card.premium{
+  background:#fdfaf3;
+  border-color:#c8a951;
+}
+
+
 body{
   margin:0;
   font-family:"Segoe UI", Georgia, serif;
@@ -160,6 +213,42 @@ p{
   <div class="mini-order">
     <h3>გაინტერესებს შენი გვარის ისტორია?</h3>
     <p>დატოვე კონტაქტი და ჩვენ დაგიკავშირდებით</p>
+
+<section class="surname-packages">
+  <h3 class="packages-title">საკვლევი პაკეტები</h3>
+
+  <div class="packages-grid">
+
+    <div class="package-card">
+      <h4>ელექტრონული პაკეტი</h4>
+      <p class="package-price">100 ₾</p>
+      <p class="package-note">
+        გვარის ანალიზი და ისტორიის ელექტრონული ვერსია<br>
+        (PDF / ციფრული დოკუმენტი)
+      </p>
+    </div>
+
+    <div class="package-card">
+      <h4>ელექტრონული + ვიზუალური</h4>
+      <p class="package-price">ფასი ინდივიდუალურია</p>
+      <p class="package-note">
+        ელექტრონული მასალა + ვიზუალური იდენტობის
+        ნივთი არჩეული კონცეფციის შესაბამისად
+      </p>
+    </div>
+
+    <div class="package-card premium">
+      <h4>სრული საგვარეულო კვლევა</h4>
+      <p class="package-price">ინდივიდუალური შეთავაზება</p>
+      <p class="package-note">
+        სრული ისტორიული კვლევა, გერბი, აღწერა,
+        დოკუმენტაცია და ყველა ელემენტი
+      </p>
+    </div>
+
+  </div>
+</section>
+
 
     <input type="text" id="miniName" placeholder="სახელი და გვარი">
     <input type="tel" id="miniPhone" placeholder="ტელეფონის ნომერი">
