@@ -589,6 +589,19 @@ input,textarea{
    REGISTRY — OFFICIAL LOOK (STEP 2)
    ===================================== */
 
+/* CART NOTE — VIP INFO */
+.cart-note{
+  background:#faf8f3;
+  border:1px dashed #c8a951;
+  color:#6b5b2e;
+  padding:12px 14px;
+  border-radius:12px;
+  font-size:13px;
+  margin-bottom:14px;
+  line-height:1.5;
+}
+
+
 .registry-section{
   background:linear-gradient(180deg,#ffffff,#f7f5f1);
   border-radius:24px;
@@ -659,6 +672,7 @@ input,textarea{
   .registry-subtitle{
     font-size:15px;
   }
+
 }
 </style>
 </head>
@@ -874,10 +888,17 @@ input,textarea{
 </div>
 
   <div class="cart">
-    <h3>კალათა</h3>
-    <ul id="cartItems"></ul>
-    <strong>ჯამი: <span id="total">0</span> ₾</strong>
+  <h3>კალათა</h3>
+
+  <div class="cart-note" id="cartNote">
+    🎁 <strong>საჩუქრები მოქმედებს მხოლოდ VIP ექსკლუზიურ შეთავაზებაზე (200 ₾).</strong><br>
+    VIP Box-ის არჩევის გარეშე საჩუქრები არ ემატება შეკვეთას.
   </div>
+
+  <ul id="cartItems"></ul>
+  <strong>ჯამი: <span id="total">0</span> ₾</strong>
+</div>
+
 
   <div class="form">
     <p style="font-size:14px;color:#777">გადახდა დროებით სატესტო რეჟიმშია</p>
