@@ -114,38 +114,34 @@ async function loadRegistry() {
     }
 
     try {
-        // 1. ორივე JSON ფაილის ერთდროულად წამოღება
         const [regRes, surRes] = await Promise.all([
             fetch('registry.json'),
             fetch('surnames.json')
         ]);
 
         if (!regRes.ok) throw new Error("registry.json ვერ ჩაიტვირთა");
-        
+
         const registry = await regRes.json();
         const surnames = surRes.ok ? await surRes.json() : [];
 
-        // 2. ძებნა რეესტრში
         const crest = registry.find(item => item.code.toUpperCase() === code);
-        // 3. ძებნა ისტორიებში (crestCode-ით დაკავშირება)
         const historyData = surnames.find(item => item.crestCode?.toUpperCase() === code);
 
         if (!crest && !historyData) {
-            document.getElementById('status').innerText = "ჩანაწერი კოდით " + code + " ვერ მოიძებნა.";
+            document.getElementById('status').innerText =
+                "ჩანაწერი კოდით " + code + " ვერ მოიძებნა.";
             return;
         }
 
-        // 4. მონაცემების ასახვა
         document.getElementById('status').style.display = 'none';
         document.getElementById('mainContainer').style.display = 'block';
 
-        // თუ გერბი გვაქვს რეესტრში
         if (crest) {
             document.getElementById('dCode').innerText = crest.code;
             document.getElementById('dOwner').innerText = crest.owner;
             document.getElementById('dDate').innerText = crest.date;
             document.getElementById('dDesc').innerText = crest.description;
-            
+
             if (crest.image) {
                 document.getElementById('mainImage').src = crest.image;
             } else {
@@ -153,77 +149,84 @@ async function loadRegistry() {
             }
         }
 
-        // თუ ისტორია გვაქვს surnames.json-ში
         if (historyData && historyData.history) {
-
             document.getElementById('historySection').style.display = 'block';
-            // პირველი წინადადება მხოლოდ
-const fullHistory = historyData.history;
-const firstSentenceMatch = fullHistory.match(/.*?[.!?]/);
-const firstSentence = firstSentenceMatch ? firstSentenceMatch[0] : fullHistory;
 
+            const fullHistory = historyData.history;
+            const firstSentenceMatch = fullHistory.match(/.*?[.!?]/);
+            const firstSentence = firstSentenceMatch
+                ? firstSentenceMatch[0]
+                : fullHistory;
 
-document.getElementById('dHistory').innerText = firstSentence;
+            document.getElementById('dHistory').innerText = firstSentence;
+            document.getElementById('unlockSection').style.display = 'block';
+            document.getElementById('uSurname').value = historyData.surname;
 
-// 10₾ ბლოკის ჩვენება
-document.getElementById('unlockSection').style.display = 'block';
-
-// ფორმაში გვარის ავტომატურად ჩაწერა
-document.getElementById('uSurname').value = historyData.surname;
-
-            
-            // თუ რეესტრში არ იყო მფლობელი, ისტორიიდან ავიღოთ გვარი
             if (!crest) {
                 document.getElementById('dOwner').innerText = historyData.surname;
                 document.getElementById('dCode').innerText = historyData.crestCode;
-                document.getElementById('pageTitle').innerText = "საგვარეულო ისტორია";
-                if (historyData.image) document.getElementById('mainImage').src = historyData.image;
+                document.getElementById('pageTitle').innerText =
+                    "საგვარეულო ისტორია";
+                if (historyData.image)
+                    document.getElementById('mainImage').src = historyData.image;
             }
         }
-
     } catch (err) {
         console.error(err);
-        document.getElementById('status').innerText = "შეცდომა: მონაცემთა ბაზასთან კავშირი ვერ დამყარდა.";
+        document.getElementById('status').innerText =
+            "შეცდომა: მონაცემთა ბაზასთან კავშირი ვერ დამყარდა.";
     }
 }
 
 window.onload = loadRegistry;
-function showUnlockForm(){
+
+function showUnlockForm() {
     const form = document.getElementById('unlockForm');
     form.style.display = 'block';
     form.scrollIntoView({ behavior: "smooth" });
 }
 
-function sendUnlockRequest(){
+function sendUnlockRequest() {
     const name = document.getElementById('uName').value.trim();
     const phone = document.getElementById('uPhone').value.trim();
     const surname = document.getElementById('uSurname').value.trim();
     const msgBox = document.getElementById('unlockMsg');
 
-    if(!name || !phone){
+    if (!name || !phone) {
         msgBox.style.color = "#b91c1c";
         msgBox.innerText = "გთხოვთ შეავსოთ ყველა ველი";
         return;
     }
 
-    fetch("https://formspree.io/f/mdadrawd", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            message: `10₾ სრული ისტორია\nსახელი: ${name}\nტელეფონი: ${phone}\nგვარი: ${surname}`
-        })
-    }).then(()=>{
-        msgBox.style.color = "#16a34a";
-        msgBox.innerText = "მოთხოვნა გაიგზავნა ✔";
-        document.getElementById('uName').value = "";
-        document.getElementById('uPhone').value = "";
-    }).catch(()=>{
-        msgBox.style.color = "#b91c1c";
-        msgBox.innerText = "შეცდომა გაგზავნისას";
-    });
-}
+    const orderId = "SUR-" + Math.floor(1000 + Math.random() * 9000);
 
+    fetch("https://script.google.com/macros/s/AKfycby251xJAamWczfxkAr9yK-n2wXNb-cbq6MmrjFztqrqsBps_1HM44L_G4qZG37sHKoiSQ/exec", {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams({
+            buyerName: name,
+            phone: phone,
+            target: surname,
+            box: "10₾ სრული ისტორია",
+            products: "სრული გვარის ისტორია",
+            total: "10",
+            orderId: orderId,
+            source: "Surname Page"
+        })
+    });
+
+    msgBox.style.color = "#16a34a";
+    msgBox.innerText = "მოთხოვნა გაიგზავნა ✔";
+
+    document.getElementById('uName').value = "";
+    document.getElementById('uPhone').value = "";
+}
 </script>
+
+
 
 </body>
 </html>
