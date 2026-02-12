@@ -704,7 +704,7 @@ input,textarea{
   <div class="hero-inner">
     <div>
       <h1>
-  არ აჩუქო უბრალოდ ყუთი,  აჩუქე ისტორია.</h1>
+  „ისტორია, გვარი და გერბი — შენი იდენტობის მემკვიდრეობა.“</h1>
 
 <ul class="hero-list">
   <li>
@@ -1124,7 +1124,9 @@ renderCart();
 
 const heroImages = [
   "images/hero1.webp",
-  "images/hero2.webp"
+  "images/hero2.webp",
+  "images/hero3.webp",
+  "images/hero4.webp"
 ];
 let heroIndex = 0;
 const heroImg = document.getElementById("heroImage");
@@ -1136,7 +1138,7 @@ setInterval(()=>{
     heroImg.src = heroImages[heroIndex];
     heroImg.style.opacity = 1;
   },400);
-},4000);
+},2000);
 
 document.querySelectorAll('.box-images').forEach(box=>{
   let imgs = box.querySelectorAll('img');
