@@ -43,6 +43,29 @@
     font-weight:600;
     color:#1f2933;
 }
+.team-section{
+  margin:60px auto 0;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:30px;
+  text-align:center;
+}
+
+.team-member img{
+  width:140px;
+  height:140px;
+  object-fit:cover;
+  border-radius:50%;
+  border:3px solid var(--gold);
+  margin-bottom:12px;
+}
+
+.team-member p{
+  font-size:14px;
+  line-height:1.5;
+  color:#374151;
+}
+
 
     </style>
 </head>
@@ -95,12 +118,32 @@
 
 
 <!-- ავტორი აქ, historySection-ის შემდეგ -->
-<div class="author-box">
-    <img src="images/levan-beraia.webp" alt="გერბის შემქმნელი ლევან ბერაია">
+<div class="team-section">
+
+  <div class="team-member">
+    <img src="images/valeri.webp" alt="ვალერი">
     <p>
-        გერბის შემქმნელი<br>
-        <strong>ლევან ბერაია</strong>
+      <strong>გვარის მკვლევარი პროფესორი</strong><br>
+      ვალერი ______
     </p>
+  </div>
+
+  <div class="team-member">
+    <img src="images/ucha.webp" alt="უჩა">
+    <p>
+      <strong>გვარის მკვლევარი პროფესორი</strong><br>
+      უჩა ______
+    </p>
+  </div>
+
+  <div class="team-member">
+    <img src="images/levani.webp" alt="ლევან ბერაია">
+    <p>
+      <strong>პროექტზე მუშაობს</strong><br>
+      ლევან ბერაია
+    </p>
+  </div>
+
 </div>
 
 <script>
