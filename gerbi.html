@@ -71,6 +71,28 @@
     <span class="history-title">გვარის ისტორიული მიმოხილვა</span>
     <div id="dHistory" class="history-text"></div>
 </div>
+<!-- 🔒 სრული ისტორია — 10₾ -->
+<div id="unlockSection" style="display:none; margin-top:30px; padding:20px; background:#faf8f3; border:1px dashed #c8a951; border-radius:16px; text-align:center;">
+    <p style="margin:0 0 15px; font-weight:600;">
+        სრული საგვარეულო ისტორიის სანახავად შეიძინეთ ელექტრონული პაკეტი — 10₾
+    </p>
+    <button onclick="showUnlockForm()" style="padding:12px 24px; background:#c8a951; border:none; border-radius:10px; font-weight:600; cursor:pointer;">
+        სრული ისტორია — 10₾
+    </button>
+</div>
+
+<!-- 📝 შეკვეთის ფორმა -->
+<div id="unlockForm" style="display:none; margin-top:20px; background:#fff; padding:20px; border-radius:16px; border:1px solid #eee;">
+    <input type="text" id="uName" placeholder="თქვენი სახელი და გვარი" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
+    <input type="tel" id="uPhone" placeholder="ტელეფონის ნომერი" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
+    <input type="text" id="uSurname" readonly style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
+    
+    <button onclick="sendUnlockRequest()" style="width:100%; padding:12px; background:#c8a951; border:none; border-radius:10px; font-weight:600; cursor:pointer;">
+        გაგზავნა
+    </button>
+    <div id="unlockMsg" style="margin-top:10px; font-weight:600;"></div>
+</div>
+
 
 <!-- ავტორი აქ, historySection-ის შემდეგ -->
 <div class="author-box">
@@ -132,9 +154,23 @@ async function loadRegistry() {
         }
 
         // თუ ისტორია გვაქვს surnames.json-ში
-        if (historyData) {
+        if (historyData && historyData.history) {
+
             document.getElementById('historySection').style.display = 'block';
-            document.getElementById('dHistory').innerText = historyData.history;
+            // პირველი წინადადება მხოლოდ
+const fullHistory = historyData.history;
+const firstSentenceMatch = fullHistory.match(/.*?[.!?]/);
+const firstSentence = firstSentenceMatch ? firstSentenceMatch[0] : fullHistory;
+
+
+document.getElementById('dHistory').innerText = firstSentence;
+
+// 10₾ ბლოკის ჩვენება
+document.getElementById('unlockSection').style.display = 'block';
+
+// ფორმაში გვარის ავტომატურად ჩაწერა
+document.getElementById('uSurname').value = historyData.surname;
+
             
             // თუ რეესტრში არ იყო მფლობელი, ისტორიიდან ავიღოთ გვარი
             if (!crest) {
@@ -152,6 +188,41 @@ async function loadRegistry() {
 }
 
 window.onload = loadRegistry;
+function showUnlockForm(){
+    const form = document.getElementById('unlockForm');
+    form.style.display = 'block';
+    form.scrollIntoView({ behavior: "smooth" });
+}
+
+function sendUnlockRequest(){
+    const name = document.getElementById('uName').value.trim();
+    const phone = document.getElementById('uPhone').value.trim();
+    const surname = document.getElementById('uSurname').value.trim();
+    const msgBox = document.getElementById('unlockMsg');
+
+    if(!name || !phone){
+        msgBox.style.color = "#b91c1c";
+        msgBox.innerText = "გთხოვთ შეავსოთ ყველა ველი";
+        return;
+    }
+
+    fetch("https://formspree.io/f/mdadrawd", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            message: `10₾ სრული ისტორია\nსახელი: ${name}\nტელეფონი: ${phone}\nგვარი: ${surname}`
+        })
+    }).then(()=>{
+        msgBox.style.color = "#16a34a";
+        msgBox.innerText = "მოთხოვნა გაიგზავნა ✔";
+        document.getElementById('uName').value = "";
+        document.getElementById('uPhone').value = "";
+    }).catch(()=>{
+        msgBox.style.color = "#b91c1c";
+        msgBox.innerText = "შეცდომა გაგზავნისას";
+    });
+}
+
 </script>
 
 </body>
